@@ -1,0 +1,11 @@
+
+{
+  "version": 2,
+  "builds": [
+    { "src": "api/track-order.js", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "/api/track-order", "dest": "api/track-order.js" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ]
+}
