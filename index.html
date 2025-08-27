@@ -1,32 +1,39 @@
+
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <title>Kargomu Takip Et</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kargo Takip Sistemi</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h2>Kargo Takip Formu</h2>
-  <form id="trackForm">
-    <input type="email" id="email" placeholder="E-posta adresiniz" required><br>
-    <input type="text" id="orderNumber" placeholder="Sipariş numaranız" required><br>
-    <button type="submit">Takip Et</button>
-  </form>
-  <pre id="result"></pre>
-
+  <div class="container">
+    <h1>Kargon Nerede?</h1>
+    <form id="trackingForm">
+      <input type="email" id="email" placeholder="E-posta adresiniz" required />
+      <input type="text" id="orderNumber" placeholder="Sipariş Numaranız" required />
+      <button type="submit">Takip Et</button>
+      <p id="message"></p>
+    </form>
+  </div>
   <script>
-    document.getElementById('trackForm').addEventListener('submit', async function(e) {
+    document.getElementById("trackingForm").addEventListener("submit", async function (e) {
       e.preventDefault();
-      const email = document.getElementById('email').value;
-      const orderNumber = document.getElementById('orderNumber').value;
+      const email = document.getElementById("email").value;
+      const orderNumber = document.getElementById("orderNumber").value;
 
-      const response = await fetch('/api/track-order', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, orderNumber })
-      });
-
+      const response = await fetch(`/api/track-order?email=${email}&order=${orderNumber}`);
       const data = await response.json();
-      document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+      const msg = document.getElementById("message");
+
+      if (data.status === "success") {
+        msg.textContent = "Kargonuzun durumu: " + data.message;
+        msg.style.color = "green";
+      } else {
+        msg.textContent = data.message;
+        msg.style.color = "red";
+      }
     });
   </script>
 </body>
