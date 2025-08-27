@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Kargomu Takip Et</title>
+</head>
+<body>
+  <h2>Kargo Takip Formu</h2>
+  <form id="trackForm">
+    <input type="email" id="email" placeholder="E-posta adresiniz" required><br>
+    <input type="text" id="orderNumber" placeholder="Sipariş numaranız" required><br>
+    <button type="submit">Takip Et</button>
+  </form>
+  <pre id="result"></pre>
+
+  <script>
+    document.getElementById('trackForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const orderNumber = document.getElementById('orderNumber').value;
+
+      const response = await fetch('/api/track-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, orderNumber })
+      });
+
+      const data = await response.json();
+      document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+    });
+  </script>
+</body>
+</html>
